@@ -1,0 +1,87 @@
+print("#Niyati_Deshmukh_11_D14B","\n")
+import numpy as np
+#DEFINING ALL REQUIRED FUNCTIONS
+def extendzeros(l,n):
+  if(len(l)<n):
+    for i in range(len(l),n):
+      l.append(0)
+  return l 
+
+def errorcheck(G,m):
+  mc=[int(i) for i in list(m.coef)]
+  E=np.identity(n,dtype=int)
+  S=[]
+  for i in E:
+    S.append([int(w) for w in np.mod((np.polynomial.Polynomial(i)%G).coef,2)])
+  for j in S:
+    j=extendzeros(j,n-k)
+  d=m%G
+  D=list(abs(int(i)%2) for i in list(d.coef))
+  D=extendzeros(D,n-k)
+  flg=0
+  for i in range(len(S)):
+    if(S[i]==D):
+      Sc=list(np.remainder(np.add(mc,E[i]),2))
+      print("syndrome matrix is: \n",np.array(S),"\n")
+      print("syndrome is: ",D," hence Error Found at",i+1,"bit ")
+      print("The corrected/decoded code word is: ",Sc)
+      flg=1
+      break
+  if(flg==0):
+    print("No error found! correct code: ",mc)  
+
+def non_systematic_code(G,M):
+  global n,k
+  print("Non Systematic Code word")
+  p0=G*M
+  p1=np.mod(p0.coef,2)
+  p = np.polynomial.Polynomial(p1)
+  print("Code word polynomial: ",p)
+  p1=[int(i) for i in p1]
+  p1=extendzeros(p1,n)
+  print("Generated code word: ",p1)
+  print("\n")
+
+def systematic_code(G,M):           
+  global n,k
+  print("Systematic Code word")
+  a=[0]*k
+  a[n-k]=1
+  a=np.polynomial.Polynomial(a)
+  q=a*M
+  r=q%G
+  p2=list(int(abs(i)%2) for i in list(r.coef))
+  p2=extendzeros(p2,n-k)
+  r=np.polynomial.Polynomial(p2+[int(i) for i in (list(M.coef))])
+  print("Code word polynomial: ",r)
+  print("Generated code word: ",p2+[int(i) for i in (list(M.coef))])
+  print("\n")
+  errorcheck(G,r) 
+
+#TAKING INPUT FROM USER
+n=int(input("Enter value of n: "))
+k=int(input("Enter value of k: "))
+print("\n")
+
+a=[int(i) for i in input("Enter generator polynomial coefficients starting from lowest degree: ").split(",")]
+Genpoly = np.polynomial.Polynomial(a)
+print("Generator Polynomial : ""\n",Genpoly)
+print("\n")
+
+M=[int(i) for i in input("Enter input message: ").split(",")]
+Mespoly = np.polynomial.Polynomial(M)
+print("The message polynomial: ""\n",Mespoly)
+print("\n")
+
+print("Encoding")
+print("\n")
+
+#CALLING FUNCTIONS
+non_systematic_code(Genpoly,Mespoly)
+systematic_code(Genpoly,Mespoly)                                                                              
+print("\n")
+
+#ERROR CHECK FOR RANDOM CODE
+R2=[int(i) for i in input("Enter another received code for error check: ").split(",")]
+r2=np.polynomial.Polynomial(R2)
+errorcheck(Genpoly,r2)
