@@ -1,0 +1,91 @@
+##Niyati Deshmukh D14B Rollno-11 exp-2 DC
+import numpy as np 
+I=np.identity(3)
+P=[[1,0,1],
+ [0, 0, 1],
+ [1, 0, 0]]
+g=np.concatenate((I,P),axis=1)
+print("Generator matrix: \n",g)
+
+n=int(input("Enter n: "))
+k=int(input("Enter k: "))
+mn=2**k
+print("Number of msgs: ",mn)
+
+m=[[0,0,0],
+   [0,0,1],
+   [0,1,0],
+   [0,1,1],
+   [1,0,0],
+   [1,0,1],
+   [1,1,0],
+   [1,1,1]]
+
+c=[[0,0,0],
+   [0,0,0],
+   [0,0,0],
+   [0,0,0],
+   [0,0,0],
+   [0,0,0],
+   [0,0,0],
+   [0,0,0]]
+
+for i in range(len(m)):
+   # iterate through columns of Y
+   for j in range(len(P[0])):
+       # iterate through rows of Y
+       for k in range(len(P)):
+           c[i][j] = c[i][j] ^ (m[i][k] * P[k][j])
+
+u=np.concatenate((m,c),axis=1)
+print("CodeWord: \n",u)
+
+P=np.array(P)
+Pt=(P.T)
+H=np.concatenate((Pt,I),axis=1)
+Ht=(H.T)
+
+#Reciever
+#r=[[0,0,0,0,0,0]]
+r=[[]]
+print("Enter Recived codeword:")
+for i in range(n):
+  r[0].append(int(input()))
+
+print("Recieved Codeword: ",r)
+# for i in range(n):
+#  r.append(int(input()))
+
+e=[[1,0,0,0,0,0],
+   [0,1,0,0,0,0],
+   [0,0,1,0,0,0],
+   [0,0,0,1,0,0],
+   [0,0,0,0,1,0],
+   [0,0,0,0,0,1]]
+
+S=[[0,0,0]]
+print("\nSyndrome Matrix: \n",Ht)
+Ht=Ht.tolist()
+
+for i in range(len(r)):
+ 
+    # iterating by column by B
+    for j in range(len(Ht[0])):
+ 
+        # iterating by rows of B
+        for k in range(len(Ht)):
+            S[i][j] = S[i][j] ^ (r[i][k] * int(Ht[k][j]))
+print(S)
+
+if [0,0,0] in S: 
+  print("No error")
+
+else:
+  x=Ht.index(S[0])
+  print("\nError is in",x+1,"th bit")
+
+  cr=[0,0,0,0,0,0]
+  for i in range(n):
+    cr[i]=e[x][i] ^ r[0][i]
+
+  print("Corrected code: ",cr)
