@@ -1,0 +1,57 @@
+//Niyati Deshmukh D14B Rollno-11
+clc;
+clear all;
+//close all;
+m=input('Enter the no. of message ensembles : ');
+z=[];
+h=0;l=0;
+disp('Enter the probabilities ');
+for i=1:m
+printf('Ensemble %d\n',i);
+p(i)=input('');
+p=gsort(p);
+end
+printf('-------------------------------------------------------------')
+disp('Enter the code word lengths for Shannon-Fano coding');
+for i=1:m
+printf('Codeword %d\n',i);
+n(i)=input('');
+end
+printf('Avg. Code Length of Shannon-Fano coding');
+//Computing Avg. Code Length & Entropy
+for i=1:m
+x=p(i)*n(i);
+l=l+x;
+x=p(i)*log2(1/p(i));
+h=h+x;
+end
+disp(l);
+printf('Entropy of Shannon-Fano coding');
+disp(h);
+printf('Efficiency of Shannon-Fano coding'); //Computing Efficiency
+disp(100*h/l);
+printf('Redundancy of Shannon-Fano coding');
+disp(100-(100*h/l));
+h1=0;l1=0;
+printf('-------------------------------------------------------------')
+disp('Enter the code word lengths for Huffman coding');
+for i=1:m
+printf('Codeword %d\n',i);
+n(i)=input('');
+end
+printf('Avg. Code Length for Huffman coding'); //Computing Avg. Code Length & Entropy
+for i=1:m
+x1=p(i)*n(i);
+l1=l1+x1;
+x1=p(i)*log2(1/p(i));
+h1=h1+x1;
+end
+disp(l1);
+printf('Entropy of Huffman coding');
+disp(h1);
+printf('Efficiency of Huffman coding'); //Computing Efficiency
+disp(100*h1/l1);
+printf('Redundancy of Huffman coding');
+disp(100-(100*h1/l1));
+printf('-------------------------------------------------------------')
+
